@@ -18,7 +18,7 @@ public class Planeta
 	private String terreno;
 	
 	private Integer id;
-	private Integer numeroFilmes;
+	private Integer filmes;
 	
 	/**
 	 * Retorno o atributo ID
@@ -28,17 +28,17 @@ public class Planeta
 		return this.id;
 	}
 	
-	public void setNumFilmes( Integer numFilmes )
+	public void setFilmes( Integer filmes )
 	{
-		this.numeroFilmes = numFilmes;
+		this.filmes = filmes;
 	}
 	
 	/**
 	 * Retorno o atributo Número de Filmes
 	 */
-	public Integer getNumFilmes( )
+	public Integer getFilmes( )
 	{
-		return this.numeroFilmes;
+		return this.filmes;
 	}
 	
 	public void setId( Integer id )

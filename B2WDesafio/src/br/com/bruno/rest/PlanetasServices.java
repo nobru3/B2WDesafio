@@ -17,6 +17,13 @@ import br.com.bruno.entidade.Planeta;
 @Path("/planetas")
 public class PlanetasServices 
 {
+	private Dao m_dao;
+	
+	public PlanetasServices( )
+	{
+		m_dao = new Dao("StarWars", "Planetas" );
+	}
+	
 	@GET
 	@Path("/listar")
 	@Produces( MediaType.APPLICATION_JSON )
@@ -24,9 +31,7 @@ public class PlanetasServices
 	{
 		try
 		{
-			Dao dao = new Dao( "StarWars", "Planetas" );
-			
-			return Response.ok( ).entity( dao.listaPlanetas( nome, id ) ).build( );
+			return Response.ok( ).entity( m_dao.listaPlanetas( nome, id ) ).build( );
 		}
 		catch( Exception e )
 		{
@@ -42,9 +47,7 @@ public class PlanetasServices
 	{
 		try
 		{
-			Dao dao = new Dao( "StarWars", "Planetas" );
-			
-			return Response.ok( ).entity( dao.adcionarPlanetas( p ) ).build( );
+			return Response.ok( ).entity( m_dao.adcionarPlanetas( p ) ).build( );
 		}
 		catch( Exception e )
 		{
@@ -60,9 +63,7 @@ public class PlanetasServices
 	{
 		try
 		{
-			Dao dao = new Dao( "StarWars", "Planetas" );
-			
-			return Response.ok( ).entity( dao.removerPlanetas( id ) ).build( );
+			return Response.ok( ).entity( m_dao.removerPlanetas( id ) ).build( );
 		}
 		catch( Exception e )
 		{

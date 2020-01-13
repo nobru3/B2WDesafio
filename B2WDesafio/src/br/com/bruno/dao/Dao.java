@@ -3,20 +3,18 @@ package br.com.bruno.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.bson.Document;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.filter.LoggingFilter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -53,11 +51,11 @@ public class Dao
         {
             Planeta p = new Planeta( );
             
-            p.setId       ( doc.getInteger( "_id"     )     );
-            p.setNome     ( doc.getString ( "nome"    )     ); 
-            p.setClima    ( doc.getString ( "clima"   )     );
-            p.setTerreno  ( doc.getString ( "terreno" )     );
-            p.setNumFilmes( coletaQtdFilmes( p.getNome( ) ) );
+            p.setId     ( doc.getInteger( "_id"     )     );
+            p.setNome   ( doc.getString ( "nome"    )     ); 
+            p.setClima  ( doc.getString ( "clima"   )     );
+            p.setTerreno( doc.getString ( "terreno" )     );
+            p.setFilmes ( coletaQtdFilmes( p.getNome( ) ) );
             
             planetas.add( p );
         }
@@ -71,13 +69,19 @@ public class Dao
 		 
 		WebTarget webTarget = client.target( "https://swapi.co/api/" ).path( "planets" ).queryParam( "search", nomePlaneta );
 		 
-		Invocation.Builder invocationBuilder = webTarget.request( MediaType.APPLICATION_JSON);
-		String             response          = invocationBuilder.get( String.class );
+		Response response = webTarget.request(MediaType.APPLICATION_JSON).get( );
 		
-		System.out.println( response );
-		//System.out.println( doc.get("results.Document.name") );
+		JSONArray jarrayFilms = new JSONArray( );
 		
-		return 0;
+		if( response.getStatus( ) == 200 )
+		{
+			JSONArray aResults    = new JSONObject( response.readEntity( String.class ) ).getJSONArray( "results" );
+			
+			for( Object obj : aResults )
+				jarrayFilms = ((JSONObject)obj).getJSONArray( "films" );
+		}
+		
+		return jarrayFilms.length( );
 	}
 	
 	private Object buscaIdPlaneta(  ) throws Exception
@@ -111,11 +115,10 @@ public class Dao
 			
 			Document doc = new Document( );
 			
+			doc.put( "_id",     idPlaneta       );
 			doc.put( "nome",    p.getNome   ( ) );
 			doc.put( "clima",   p.getClima  ( ) );
 			doc.put( "terreno", p.getTerreno( ) );
-			
-			doc.put( "_id",  idPlaneta );
 			
 			m_collection.insertOne( doc );
 			
@@ -123,7 +126,7 @@ public class Dao
 		}
 		catch ( Exception e )
 		{
-			return new Return( 0, e.getMessage( ) );
+			return new Return( -1, "Erro ao incluir planeta." );
 		}
 	}
 	
@@ -140,7 +143,7 @@ public class Dao
 		}
 		catch ( Exception e )
 		{
-			return new Return( id, e.getMessage( ) );
+			return new Return( id, "Erro ao incluir planeta." );
 		}
 	}
 }
