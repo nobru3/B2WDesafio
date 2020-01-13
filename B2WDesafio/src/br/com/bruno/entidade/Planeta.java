@@ -20,6 +20,18 @@ public class Planeta
 	private Integer id;
 	private Integer filmes;
 	
+	public Planeta( )
+	{
+	
+	}
+	
+	public Planeta( String nome, String clima, String terreno )
+	{
+		this.nome    = nome;
+		this.terreno = terreno;
+		this.clima   = clima;
+	}
+	
 	/**
 	 * Retorno o atributo ID
 	 */

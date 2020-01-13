@@ -24,6 +24,14 @@ public class PlanetasServices
 		m_dao = new Dao("StarWars", "Planetas" );
 	}
 	
+	/**
+	 * Utilizado para testes de integração
+	 */
+	public PlanetasServices( String strCollection )
+	{
+		m_dao = new Dao( "StarWars", strCollection );
+	}
+	
 	@GET
 	@Path("/listar")
 	@Produces( MediaType.APPLICATION_JSON )
@@ -59,7 +67,7 @@ public class PlanetasServices
 	@Path("/remover/{id}")
 	@Consumes( MediaType.APPLICATION_JSON )
 	@Produces( MediaType.APPLICATION_JSON )
-	public Response adcionarPlanetas( @PathParam("id") int id )
+	public Response removerPlanetas( @PathParam("id") int id )
 	{
 		try
 		{

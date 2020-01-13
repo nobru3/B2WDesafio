@@ -135,15 +135,17 @@ public class Dao
 		try
 		{
 			BasicDBObject find = new BasicDBObject();
-		    find.put("_id", id );
 			
-			m_collection.deleteOne( find );
+			if( id > 0 )
+				find.put("_id", id );
+			
+			m_collection.deleteMany( find );
 			
 			return new Return( id, "Planeta removido com sucesso." );
 		}
 		catch ( Exception e )
 		{
-			return new Return( id, "Erro ao incluir planeta." );
+			return new Return( id, "Erro ao excluir planeta." );
 		}
 	}
 }
